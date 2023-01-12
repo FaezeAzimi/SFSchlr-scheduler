@@ -1,5 +1,5 @@
 # SFSchlr-scheduler
-SFSchlr is a function scheduler for serverless envirnoment.
+SFSchlr is a function scheduler for serverless environment.
 
 please copy the code into '/opt' directory.
 you must have this path: '/opt/scheduler/*'
