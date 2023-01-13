@@ -1,8 +1,11 @@
 import numpy as np
 import random
-import pkgaware as pkga
 import pkgmon as mon
 import numpy as np
+
+from pkgaware.Discrete import sample as pkgasample
+from pkgaware.FuncEnv import step as pkgastep
+
 
 def random_function_gen(steps):
     for x in range(0,steps):
@@ -16,7 +19,7 @@ def update_state(state, state2, reward, action, action2):
 def choose_action(state,action,abso):
         action=0
         if np.random.uniform(0, 1) < epsilon:
-                action = pkga.sample(state,action,reward)
+                action = pkgasample(state,action,reward)
         else:
                 action = np.argmax(Q[state, :])
         return action
@@ -25,11 +28,11 @@ def SFSchlr(queue):
         abso=1
         for func in queue:
                 t = 0
-                state1 = pkga.FuncEnv()
+#                state1 = pkga.FuncEnv()
                 st1=state1.reset()
                 action1 = choose_action(st1,ch_action,abso)
                 while t < max_steps:
-                        state2, reward, abso, done = pkga.step(action1,st1,func,func_path)
+                        state2, reward, abso, done = pkgastep(action1,st1,func,func_path)
                         action2 = choose_action(state2)
                         st1 = state2
                         action1 = action2
