@@ -23,6 +23,9 @@ class ContainerWatch(threading.Thread):
             list.append([i,pkgs,1])
         self.env=np.array(list)
     
+    def get_environment(self):
+        return self.env
+    
     def get_containers(self,container):
         ncon = []
         lines=container.read()
