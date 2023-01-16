@@ -1,8 +1,9 @@
 import numpy as np
 import random
-import pkgaware as pkga
+from pkgaware import Discrete as dis1
+from pkgaware import FuncEnv as funce1
 import pkgmon as mon
-import numpy as np
+from pkgmon import Env as upenv
 
 def random_function_gen(steps):
     for x in range(0,steps):
@@ -16,20 +17,19 @@ def update_state(state, state2, reward, action, action2):
 def choose_action(state,action,abso):
         action=0
         if np.random.uniform(0, 1) < epsilon:
-                action = pkga.sample(state,action,reward)
+                action = dis1.sample(state,action,reward)
         else:
                 action = np.argmax(Q[state, :])
         return action
 
-def SFSchlr(queue):
+def SFSchlr(queue,objects):
         abso=1
         for func in queue:
                 t = 0
-                state1 = pkga.FuncEnv()
-                st1=state1.reset()
+                st1=objects.get_environment()
                 action1 = choose_action(st1,ch_action,abso)
                 while t < max_steps:
-                        state2, reward, abso, done = pkga.step(action1,st1,func,func_path)
+                        state2, reward, abso, done = funce1.step(action1,st1,func,func_path)
                         action2 = choose_action(state2)
                         st1 = state2
                         action1 = action2
@@ -67,4 +67,4 @@ func_path="/opt/scheduler/Functions"
 core1=mon.Env(env,docker_file_path,func_path,docker_image_name)
 watch=mon.ContainerWatch()
 watch.start()
-SFSchlr(queue1)
+SFSchlr(queue1,watch)
