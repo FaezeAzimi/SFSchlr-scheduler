@@ -22,10 +22,10 @@ class ContainerWatch(threading.Thread):
             pkgs=self.get_packages(i)
             list.append([i,pkgs,1])
         self.env=np.array(list)
-    
+
     def get_environment(self):
         return self.env
-    
+
     def get_containers(self,container):
         ncon = []
         lines=container.read()
@@ -34,7 +34,7 @@ class ContainerWatch(threading.Thread):
             ncon.append(int(lines[i+10:i+11]))
         ncon.sort()
         return ncon
-    
+
     def find_all(self,lines, sub):
         result = []
         i = 0
@@ -44,9 +44,9 @@ class ContainerWatch(threading.Thread):
                 return result
             else:
                 result.append(i)
-                i += 1 
+                i += 1
         return result
-    
+
     def get_packages(self,con):
         output = os.popen("docker exec serverless"+str(con)+" pip list --disable-pip-version-check | awk '{ print $1 }'")
         lst=output.read().splitlines()
@@ -56,7 +56,7 @@ class ContainerWatch(threading.Thread):
     def kill_container(con):
         output = os.popen("docker stop serverless"+str(con))
         output = os.popen("docker container prune")
-        
+
     def upgrade_container(con,env):
         output = os.popen("docker stop serverless"+str(con))
         for count,pkg,size in env:
@@ -67,4 +67,4 @@ class ContainerWatch(threading.Thread):
         for count,pkg,size in env:
             output = os.popen('docker run -d --name serverless'+str(count)+' --memory='+str(size-1)+'g --cpuset-cpus='+str(size-1)+' '+img_name+':'+self.image_ver)
 
-    
+
