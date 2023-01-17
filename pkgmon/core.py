@@ -8,7 +8,7 @@ class Env:
         self.image_ver="0.1"
         self.build_image(dock_file,img_name)
         self.init_containers(environment,img_name)
-    
+
     def set_image_ver(self,img_ver):
         self.image_ver=img_ver
 
@@ -32,10 +32,11 @@ class Env:
             return False
         else:
             return True
-            
+
     def remove_oldimage(self,img_name):
         output = os.popen('docker rmi '+ img_name+':'+self.image_ver)
 
     def init_containers(self,env,img_name):
         for count,pkg,size in env:
             output = os.popen('docker run -d --name serverless'+str(count)+' --memory='+str(size)+'g --cpuset-cpus='+str(size-1)+' '+img_name+':'+self.image_ver)
+
