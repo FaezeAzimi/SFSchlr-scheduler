@@ -9,11 +9,11 @@ class Discrete():
     def __init__(self, n):
         assert n >= 0
         self.n = n
-        super(Discrete, self).__init__((), np.int64)
 
-    def sample(state,action,abso):
+    def sample(self,state,action,abso):
         Actions=['A1','A2','A3','A4','A5','A6']
         container_id=[i[0] for i in state]
+        action1 = 0
         if abso == 1:
            action1 = action
         elif abso == 1:
@@ -63,7 +63,7 @@ class FuncEnv():
         pass
     def step(self,action,state,func,func_path):
         log_loc="/opt/scheduler/Log/time_output.log"
-        observation, reward, done, info = self.env.step(action)
+#        observation, reward, done, info = self.env.step(action)
         container_id=[i[0] for i in state]
         if action == 'A1':
             containerid =_random.choice(container_id)
@@ -111,7 +111,7 @@ class FuncEnv():
                     containerid=ci
                     satu=os.popen('docker exec '+containerid+' free -g | awk NR==2{print $7}')
                     if satu > 80 :
-                        time.sleep(5) 
+                        time.sleep(5)
                     else:
                         containerid =_random.choice(container_id)
                     v1=datetime.datetime.now()
@@ -129,7 +129,7 @@ class FuncEnv():
             satu=os.popen('docker exec '+containerid+' free -g | awk NR==2{print $7}')
             if satu > 80:
                 image_ver=1
-                os.popen('docker commit '+containerid+" "+func+':'+image_ver) 
+                os.popen('docker commit '+containerid+" "+func+':'+image_ver)
                 containerid=os.popen('docker build -t '+func+':'+image_ver+' /opt/scheduler/Docker')
             else:
                 containerid =_random.choice(container_id)
@@ -158,7 +158,7 @@ class FuncEnv():
                     satu=os.popen('docker exec '+containerid+' free -g | awk NR==2{print $7}')
                     if satu > 80:
                         image_ver1=1
-                        os.popen('docker commit '+containerid+" "+func+':'+image_ver1) 
+                        os.popen('docker commit '+containerid+" "+func+':'+image_ver1)
                         containerid=os.popen('docker build -t '+func+':'+image_ver1+' /opt/scheduler/Docker')
                     else:
                         containerid =_random.choice(container_id)
@@ -211,12 +211,13 @@ class FuncEnv():
             reward -= 1.0
             diff=0
         return reward,diff
-    
+
     def percentage_sim(s1, s2):
         assert len(s1)==len(s2), "Lists must have the same shape"
         nb_agreements = 0  # initialize counter to 0
         for idx, value in enumerate(s1):
             if s2[idx] == value:
-                nb_agreements += 1      
+                nb_agreements += 1
         percentage_agreement = nb_agreements/len(s1)
-        return sim  
+        return sim
+
